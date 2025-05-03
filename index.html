@@ -1,21 +1,18 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>My Tasks</title>
-  <link rel="stylesheet" href="style.css" />
+  <meta charset="UTF-8">
+  <title>To-Do List</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-  <main class="task-app">
-    <h1>My To-Do List</h1>
-    <section class="input-section">
-      <input type="text" id="newTask" placeholder="Type your task here..." />
-      <button onclick="createTask()">Add</button>
-      <button onclick="cleanDuplicates()">Remove Repeats</button>
-    </section>
-    <ul id="taskItems"></ul>
-  </main>
+  <div class="header">TO-DO LIST</div>
+  <div class="container">
+    <input type="text" id="taskInput" placeholder="Enter a task !" />
+    <button onclick="addTask()">ADD</button>
+    <ul id="taskList"></ul>
+    <button onclick="clearAll()" class="clear-all">CLEAR ALL</button>
+  </div>
   <script src="script.js"></script>
 </body>
 </html>

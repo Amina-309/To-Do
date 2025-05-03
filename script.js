@@ -1,74 +1,69 @@
-// Load existing tasks
-window.addEventListener("DOMContentLoaded", () => {
-  const stored = localStorage.getItem("taskList");
-  if (stored) {
-    JSON.parse(stored).forEach(t => addToDOM(t.text, t.completed));
-  }
-});
+document.addEventListener('DOMContentLoaded', loadTasks);
 
-function saveTasks() {
-  const taskElements = document.querySelectorAll("#taskItems li");
-  const data = Array.from(taskElements).map(li => ({
-    text: li.dataset.text,
-    completed: li.classList.contains("done")
-  }));
-  localStorage.setItem("taskList", JSON.stringify(data));
-}
+function addTask() {
+  const taskInput = document.getElementById("taskInput");
+  const taskText = taskInput.value.trim();
+  if (taskText === "") return;
 
-function createTask() {
-  const input = document.getElementById("newTask");
-  const content = input.value.trim();
-  if (content === "") return;
-
-  const currentTasks = Array.from(document.querySelectorAll("#taskItems li")).map(li => li.dataset.text);
-  if (currentTasks.includes(content)) {
+  const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+  if (tasks.find(task => task.text === taskText)) {
     alert("Task already exists.");
     return;
   }
 
-  addToDOM(content);
-  input.value = "";
-  saveTasks();
+  const newTask = { text: taskText, completed: false };
+  tasks.push(newTask);
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  taskInput.value = "";
+  renderTasks();
 }
 
-function addToDOM(text, completed = false) {
-  const item = document.createElement("li");
-  item.className = "task";
-  if (completed) item.classList.add("done");
-  item.dataset.text = text;
+function renderTasks() {
+  const taskList = document.getElementById("taskList");
+  taskList.innerHTML = "";
+  const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
 
-  const label = document.createElement("span");
-  label.textContent = text;
-  label.addEventListener("click", () => {
-    item.classList.toggle("done");
-    saveTasks();
+  tasks.forEach((task, index) => {
+    const li = document.createElement("li");
+
+    const checkbox = document.createElement("input");
+    checkbox.type = "checkbox";
+    checkbox.checked = task.completed;
+    checkbox.onchange = () => toggleComplete(index);
+    li.appendChild(checkbox);
+
+    const span = document.createElement("span");
+    span.textContent = task.text;
+    li.appendChild(span);
+
+    const clearBtn = document.createElement("button");
+    clearBtn.textContent = "CLEAR";
+    clearBtn.onclick = () => removeTask(index);
+    li.appendChild(clearBtn);
+
+    taskList.appendChild(li);
   });
-
-  const delBtn = document.createElement("button");
-  delBtn.textContent = "Delete";
-  delBtn.addEventListener("click", () => {
-    item.remove();
-    saveTasks();
-  });
-
-  const actions = document.createElement("div");
-  actions.className = "task-controls";
-  actions.appendChild(delBtn);
-
-  item.appendChild(label);
-  item.appendChild(actions);
-  document.getElementById("taskItems").appendChild(item);
 }
 
-function cleanDuplicates() {
-  const seen = new Set();
-  document.querySelectorAll("#taskItems li").forEach(li => {
-    const text = li.dataset.text;
-    if (seen.has(text)) {
-      li.remove();
-    } else {
-      seen.add(text);
-    }
-  });
-  saveTasks();
+function toggleComplete(index) {
+  const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+  tasks[index].completed = !tasks[index].completed;
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  renderTasks();
+}
+
+function removeTask(index) {
+  const tasks = JSON.parse(localStorage.getItem("tasks") || "[]");
+  tasks.splice(index, 1);
+  localStorage.setItem("tasks", JSON.stringify(tasks));
+  renderTasks();
+}
+
+function clearAll() {
+  localStorage.removeItem("tasks");
+  renderTasks();
+}
+
+function loadTasks() {
+  renderTasks();
 }
