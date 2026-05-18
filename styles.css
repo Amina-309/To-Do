@@ -1,13 +1,14 @@
 body {
   margin: 0;
-  font-family: Arial, sans-serif;
+  font-family: 'Poppins', sans-serif;
   background-color: white;
+  font-size: 13px;
 }
 
 .header {
-  background-color: indigo;
+  background:linear-gradient(135deg, #5f0a87, #a4508b);;
   color: white;
-  font-size: 60px;
+  font-size: 50px;
   text-align: center;
   padding: 30px 0;
 }
@@ -21,16 +22,27 @@ body {
 
 input[type="text"] {
   padding: 10px;
-  font-size: 18px;
+  font-size: 13px;
   margin: 10px 5px;
   width: 250px;
   background-color: #eee;
 }
 
+input:focus {
+  outline: none;
+  border-color: purple;
+}
+
+.task-content {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
 button {
   padding: 10px 20px;
   font-weight: bold;
-  font-size: 16px;
+  font-size: 12px;
   background-color: #ddd;
   border: 1px solid #999;
   cursor: pointer;
@@ -52,6 +64,8 @@ li {
   background-color: #eee;
   margin: 5px 0;
   padding: 8px 10px;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.08);
 }
 
 li input[type="checkbox"] {
@@ -62,6 +76,38 @@ li button {
   margin-left: auto;
 }
 
+
+
+.completed {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+/* ADD BUTTON */
+.container button:first-of-type {
+  background: #28a745;
+  color: white;
+}
+
+/* EDIT BUTTON */
+li button:nth-child(3) {
+  background: #007bff;
+  color: white;
+}
+
+/* DELETE BUTTON */
+li button:nth-child(4) {
+  background: #dc3545;
+  color: white;
+}
+
+/* CLEAR ALL */
 .clear-all {
-  margin-top: 30px;
+  background: #343a40;
+  color: white;
+}
+
+.clear-all:hover{
+  background-color: white;
+  color: #343a40 ;
 }
